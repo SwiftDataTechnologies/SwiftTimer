@@ -10,13 +10,16 @@ import UIKit
 import CoreMotion
 import CoreLocation
 
-class SecondViewController: UIViewController {
+class SecondViewController: UIViewController, CLLocationManagerDelegate {
     
     //MARK: Properties
     @IBOutlet weak var accelX: UILabel!
     @IBOutlet weak var accelY: UILabel!
     @IBOutlet weak var accelZ: UILabel!
     @IBOutlet weak var speedGPS: UILabel!
+    @IBOutlet weak var latGPS: UILabel!
+    @IBOutlet weak var lonGPS: UILabel!
+    @IBOutlet weak var gpsStatus: UILabel!
     
     var motionManager: CMMotionManager!
     var locationManager: CLLocationManager!
@@ -46,14 +49,38 @@ class SecondViewController: UIViewController {
                 self.maxZAccel = abs(currentAccelZ)
             }
             self.accelZ.text = "Max acceleration: " + String(format: "%04.2f", self.maxZAccel) + " g"
-            self.accelX.text = "Max turning: " + String(format: "%04.2f", self.maxXAccel) + " g"
-            self.accelY.text = "Max vertical: " + String(format: "%04.2f", self.maxYAccel) + " g"
+            self.accelX.text = "Max turning: "      + String(format: "%04.2f", self.maxXAccel) + " g"
+            self.accelY.text = "Max vertical: "     + String(format: "%04.2f", self.maxYAccel) + " g"
         })
         
         // GPS data
-        locationManager = CLLocationManager()
-        let speed = locationManager.location!.speed
-        self.speedGPS.text = String(format: "%04.2f", speed)
+        let locationManager = CLLocationManager()
+        func startReceivingLocationChanges() {
+            let authorizationStatus = CLLocationManager.authorizationStatus()
+            if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
+                // User has not authorized access to location information.
+                return
+            }
+            // Do not start services that aren't available.
+            if !CLLocationManager.locationServicesEnabled() {
+                // Location services is not available.
+                return
+            }
+            // Configure and start the service.
+            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+            locationManager.distanceFilter = 1.0  // In meters.
+            locationManager.delegate = self
+            locationManager.startUpdatingLocation()
+            
+            let lastCoord = locationManager.location!.coordinate
+            let lastSpeed = locationManager.location!.speed
+            let horAccur  = locationManager.location!.horizontalAccuracy
+            self.speedGPS.text = "GPS Speed: "      + String(format: "%.1f", 3.6*lastSpeed)  + " km/h"
+            self.latGPS.text = "GPS Lat: "          + String(format: "%.5f", lastCoord.latitude)
+            self.lonGPS.text = "GPS Long: "         + String(format: "%.5f", lastCoord.longitude)
+            self.gpsStatus.text = "GPS Accuracy: "  + String(format: "%.0f", horAccur) + " m"
+        }
+        startReceivingLocationChanges()
     }
 
     override func didReceiveMemoryWarning() {
