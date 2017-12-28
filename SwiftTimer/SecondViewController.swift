@@ -30,8 +30,9 @@ class SecondViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Accelerometer data
+        /* Accelerometer data */
         motionManager = CMMotionManager()
+        motionManager.accelerometerUpdateInterval = 0.001
         motionManager.startAccelerometerUpdates()
         motionManager.startAccelerometerUpdates(to: OperationQueue.current!, withHandler: { data, error in
             guard error == nil else { return }
@@ -53,36 +54,46 @@ class SecondViewController: UIViewController, CLLocationManagerDelegate {
             self.accelY.text = "Max vertical: "     + String(format: "%04.2f", self.maxYAccel) + " g"
         })
         
-        // GPS data
-        let locationManager = CLLocationManager()
-        func startReceivingLocationChanges() {
-            let authorizationStatus = CLLocationManager.authorizationStatus()
-            if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
-                // User has not authorized access to location information.
-                return
-            }
-            // Do not start services that aren't available.
-            if !CLLocationManager.locationServicesEnabled() {
-                // Location services is not available.
-                return
-            }
-            // Configure and start the service.
-            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-            locationManager.distanceFilter = 1.0  // In meters.
-            locationManager.delegate = self
-            locationManager.startUpdatingLocation()
-            
-            let lastCoord = locationManager.location!.coordinate
-            let lastSpeed = locationManager.location!.speed
-            let horAccur  = locationManager.location!.horizontalAccuracy
-            self.speedGPS.text = "GPS Speed: "      + String(format: "%.1f", 3.6*lastSpeed)  + " km/h"
-            self.latGPS.text = "GPS Lat: "          + String(format: "%.5f", lastCoord.latitude)
-            self.lonGPS.text = "GPS Long: "         + String(format: "%.5f", lastCoord.longitude)
-            self.gpsStatus.text = "GPS Accuracy: "  + String(format: "%.0f", horAccur) + " m"
+        /* GPS data */
+        locationManager = CLLocationManager()
+        let authorizationStatus = CLLocationManager.authorizationStatus()
+        if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
+            // User has not authorized access to location information.
+            return
         }
-        startReceivingLocationChanges()
+        // Do not start services that aren't available.
+        if !CLLocationManager.locationServicesEnabled() {
+            // Location services is not available.
+            return
+        }
+        // Configure and start the location service.
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        locationManager.distanceFilter = 1.0  // In meters.
+        locationManager.delegate = self
+        locationManager.startUpdatingLocation()
+    }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations location: [CLLocation]) {
+        //let lastTime  = manager.location!.timestamp
+        let lastCoord = manager.location!.coordinate
+        let lastSpeed = manager.location!.speed
+        //let lastCourse = manager.location!.course
+        let horAccur  = manager.location!.horizontalAccuracy
+        self.speedGPS.text =  "GPS Speed: "     + String(format: "%.1f", 3.6*lastSpeed)  + " km/h"
+        self.latGPS.text =    "GPS Lat: "       + String(format: "%.5f", lastCoord.latitude)
+        self.lonGPS.text =    "GPS Long: "      + String(format: "%.5f", lastCoord.longitude)
+        self.gpsStatus.text = "GPS Accuracy: "  + String(format: "%.0f", horAccur) + " m"
+    }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
+    {
+        // Display error in GPS status info text
+        self.gpsStatus.text = "Error \(error)"
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
