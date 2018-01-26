@@ -56,6 +56,9 @@ class SecondViewController: UIViewController, CLLocationManagerDelegate {
         
         /* GPS data */
         locationManager = CLLocationManager()
+        // TODO: request at launch time since location is key!!!!
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.requestAlwaysAuthorization()
         let authorizationStatus = CLLocationManager.authorizationStatus()
         if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
             // User has not authorized access to location information.
@@ -87,11 +90,11 @@ class SecondViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
+    /*func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
     {
         // Display error in GPS status info text
         self.gpsStatus.text = "Error \(error)"
-    }
+    }*/
 
     
     override func didReceiveMemoryWarning() {

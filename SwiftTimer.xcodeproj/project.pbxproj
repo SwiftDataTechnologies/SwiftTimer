@@ -358,10 +358,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8YPE462XNE;
+				DEVELOPMENT_TEAM = X2D297Q9JQ;
 				INFOPLIST_FILE = SwiftTimer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = SwiftDataTechnologies.SwiftTimer;
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftDataTechnologiesSLU.SwiftTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -373,10 +373,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8YPE462XNE;
+				DEVELOPMENT_TEAM = X2D297Q9JQ;
 				INFOPLIST_FILE = SwiftTimer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = SwiftDataTechnologies.SwiftTimer;
+				PRODUCT_BUNDLE_IDENTIFIER = SwiftDataTechnologiesSLU.SwiftTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
